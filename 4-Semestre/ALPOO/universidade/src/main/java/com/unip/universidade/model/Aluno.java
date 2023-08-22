@@ -2,9 +2,12 @@ package com.unip.universidade.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class Aluno {
     private int matricula;
     private String nome;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dataNascimento;
 
     public Aluno() {
