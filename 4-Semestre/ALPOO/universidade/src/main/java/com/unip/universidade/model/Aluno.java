@@ -4,6 +4,11 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Aluno {
     private int matricula;
     private String nome;
@@ -18,29 +23,4 @@ public class Aluno {
         this.nome = nome;
         this.dataNascimento = dataNascimento;
     }
-
-    public int getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(int matricula) {
-        this.matricula = matricula;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public Date getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public void setDataNascimento(Date dataNascimento) {
-        this.dataNascimento = dataNascimento;
-    }
-
 }

@@ -23,4 +23,12 @@ public class AlunoService {
         return lista;
     }
 
+    public Aluno findAluno(int matricula) {
+        for (Aluno aluno : lista) {
+            if (aluno.getMatricula() == matricula)
+                return aluno;
+        }
+        return null;
+    }
+
 }
