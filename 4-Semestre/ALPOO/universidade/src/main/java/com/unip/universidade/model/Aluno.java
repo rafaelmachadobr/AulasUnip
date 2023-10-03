@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,9 +27,19 @@ public class Aluno {
     private String nome;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dataNascimento;
+    @ManyToOne
+    @JoinColumn(name = "tcc_codigo")
+    private Tcc tcc;
+
+    public Aluno(int matricula, String nome, Date dataNascimento) {
+        this.matricula = matricula;
+        this.nome = nome;
+        this.dataNascimento = dataNascimento;
+    }
 
     public Aluno(String nome, Date dataNascimento) {
         this.nome = nome;
         this.dataNascimento = dataNascimento;
     }
+
 }

@@ -9,66 +9,54 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.unip.universidade.model.Aluno;
-import com.unip.universidade.model.db.AlunoDAO;
+import com.unip.universidade.repository.AlunoRepository;
 
 @Controller
 public class AlunoController {
-    // private AlunoService alunoService;
-    private AlunoDAO alunoDAO;
-
     @Autowired
-    // public AlunoController(AlunoService alunoService) {
-    public AlunoController(AlunoDAO alunoDAO) {
-        this.alunoDAO = alunoDAO;
-    }
+    // private AlunoDAO alunoDAO;
+    private AlunoRepository alunoRepository;
 
     @RequestMapping("/listaAlunos")
     public ModelAndView listarAlunos(@ModelAttribute("aluno") Aluno aluno) {
         ModelAndView modelAndView = new ModelAndView("alunos");
-        // modelAndView.addObject("listaDeAlunos", alunoService.listarAlunos());
+        // modelAndView.addObject("listaDeAlunos", alunoDAO.listarAlunos());
         modelAndView.addObject("listaDeAlunos",
-                alunoDAO.listarAlunos());
-        modelAndView.addObject("aluno", new Aluno());
+                alunoRepository.findAll());
         return modelAndView;
     }
 
     @RequestMapping("/selecionaAluno")
     public ModelAndView selecionarAlunos(@RequestParam("id") int matricula) {
         System.out.println("buscando o aluno: " + matricula);
-        // Aluno aluno = alunoService.findAluno(matricula);
-        Aluno aluno = alunoDAO.pesquisarAluno(matricula);
+        // Aluno aluno = alunoDAO.pesquisarAluno(matricula);
+        Aluno aluno = alunoRepository.findById(Integer.valueOf(matricula)).get();
         ModelAndView modelAndView = new ModelAndView("alunos");
-        // modelAndView.addObject("listaDeAlunos", alunoService.listarAlunos());
+        // modelAndView.addObject("listaDeAlunos", alunoDAO.listarAlunos());
         modelAndView.addObject("listaDeAlunos",
-                alunoDAO.listarAlunos());
+                alunoRepository.findAll());
         modelAndView.addObject("aluno", aluno);
         return modelAndView;
     }
 
-    @PostMapping("/aluno")
+    @PostMapping("/salvaAluno")
     public String salvarAluno(@ModelAttribute("aluno") Aluno aluno) {
-        // Aluno alunoTemp = alunoService.findAluno(aluno.getMatricula());
-        Aluno alunoTemp = alunoDAO.pesquisarAluno(aluno.getMatricula());
-        if (alunoTemp != null) {
-            // int idAlunoTemp = alunoService.listarAlunos().indexOf(alunoTemp);
-            // alunoService.listarAlunos().set(idAlunoTemp, aluno);
-            alunoDAO.alterarAluno(aluno);
-        } else
-            // alunoService.listarAlunos().add(aluno);
-            alunoDAO.incluirAluno(aluno);
+        /*
+         * Aluno alunoTemp =
+         * alunoDAO.pesquisarAluno(aluno.getMatricula());
+         * if (alunoTemp != null) {
+         * alunoDAO.alterarAluno(aluno);
+         * } else
+         * alunoDAO.incluirAluno(aluno);
+         */
+        alunoRepository.save(aluno);
         return "redirect:/listaAlunos";
     }
 
     @RequestMapping("/removeAluno")
     public String removerAluno(@RequestParam("id") int matricula) {
-        /*
-         * Aluno alunoTemp = alunoService.findAluno(matricula);
-         * if (alunoTemp != null) {
-         * int idAlunoTemp = alunoService.listarAlunos().indexOf(alunoTemp);
-         * alunoService.listarAlunos().remove(idAlunoTemp);
-         * }
-         */
-        alunoDAO.excluirAluno(matricula);
+        // alunoDAO.excluirAluno(matricula);
+        alunoRepository.deleteById(Integer.valueOf(matricula));
         return "redirect:/listaAlunos";
     }
 }
