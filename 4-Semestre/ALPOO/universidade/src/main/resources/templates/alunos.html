@@ -14,90 +14,117 @@
       integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
       crossorigin="anonymous"
     />
+    <style>
+      .center-vertically {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 1rem 0;
+      }
+    </style>
   </head>
   <body>
-    <div
-      class="card bg-light rounded border border-1 border-dark position-absolute top-50 start-50 translate-middle w-50"
-    >
-      <h2 class="card-header">Alunos</h2>
-      <div class="card-body">
-        <form method="POST" th:object="${aluno}" th:action="@{/salvaAluno}">
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="inputGroup-sizing-default"
-              >Matricula</span
+    <div class="center-vertically">
+      <div
+        class="card bg-light rounded border border-1 border-dark"
+        style="min-width: 50%; max-width: 90%"
+      >
+        <h2 class="card-header">Alunos</h2>
+        <div class="card-body">
+          <form method="POST" th:object="${aluno}" th:action="@{/salvaAluno}">
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="inputGroup-sizing-default"
+                >Matricula</span
+              >
+              <input
+                type="text"
+                name="matricula"
+                class="form-control"
+                th:field="*{matricula}"
+              />
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="inputGroup-sizing-default"
+                >Nome</span
+              >
+              <input
+                type="text"
+                name="nome"
+                class="form-control"
+                th:field="*{nome}"
+                aria-describedby="inputGroup-sizing-default"
+                th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid' : ''"
+              />
+              <div class="invalid-feedback">
+                <span
+                  th:if="${#fields.hasErrors('nome')}"
+                  th:errors="*{nome}"
+                ></span>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="inputGroup-sizing-default"
+                >Data de Nascimento</span
+              >
+              <input
+                type="date"
+                name="dataNascimento"
+                class="form-control"
+                th:field="*{dataNascimento}"
+                th:classappend="${#fields.hasErrors('dataNascimento')} ? 'is-invalid' : ''"
+              />
+              <div class="invalid-feedback">
+                <span
+                  th:if="${#fields.hasErrors('dataNascimento')}"
+                  th:errors="*{dataNascimento}"
+                ></span>
+              </div>
+            </div>
+            <input type="submit" value="Salvar" class="btn btn-primary" />
+          </form>
+          <div class="table-responsive">
+            <table
+              class="table mt-4 text-center table-hover table-striped table-bordered align-middle"
             >
-            <input
-              type="text"
-              name="matricula"
-              class="form-control"
-              th:field="*{matricula}"
-            />
-          </div>
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="inputGroup-sizing-default"
-              >Nome</span
-            >
-            <input
-              type="text"
-              name="nome"
-              class="form-control"
-              th:field="*{nome}"
-              aria-describedby="inputGroup-sizing-default"
-            />
-          </div>
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="inputGroup-sizing-default"
-              >Data de Nascimento</span
-            >
-            <input
-              type="date"
-              name="dataNascimento"
-              class="form-control"
-              th:field="*{dataNascimento}"
-            />
-          </div>
-          <input type="submit" value="Salvar" class="btn btn-primary" />
-        </form>
-        <div class="table-responsive">
-          <table
-            class="table mt-4 text-center table-hover table-striped table-bordered align-middle"
-          >
-            <thead>
-              <tr class="table-primary">
-                <td>Matrícula</td>
-                <td>Nome</td>
-                <td>Data de Nascimento</td>
-                <td>Alterar</td>
-                <td>Excluir</td>
-              </tr>
-            </thead>
-            <tbody class="table-group-divider">
-              <tr th:each="aluno: ${listaDeAlunos}">
-                <td th:text="${aluno.matricula}"></td>
-                <td th:text="${aluno.nome}"></td>
-                <td
-                  th:text="${#dates.format(aluno.dataNascimento, 
+              <thead>
+                <tr class="table-primary">
+                  <td>Matrícula</td>
+                  <td>Nome</td>
+                  <td>Data de Nascimento</td>
+                  <td>Alterar</td>
+                  <td>Excluir</td>
+                </tr>
+              </thead>
+              <tbody class="table-group-divider">
+                <tr th:each="aluno: ${listaDeAlunos}">
+                  <td th:text="${aluno.matricula}"></td>
+                  <td th:text="${aluno.nome}"></td>
+                  <td
+                    th:text="${#dates.format(aluno.dataNascimento, 
           'dd/MM/yyyy')}"
-                ></td>
-                <td>
-                  <a
-                    th:href="@{/selecionaAluno(id=${aluno.matricula})}"
-                    class="btn btn-primary"
-                  >
-                    Alterar</a
-                  >
-                </td>
-                <td>
-                  <a
-                    th:href="@{/removeAluno(id=${aluno.matricula})}"
-                    class="btn btn-danger"
-                  >
-                    Excluir</a
-                  >
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  ></td>
+                  <td>
+                    <a
+                      th:href="@{/selecionaAluno(id=${aluno.matricula})}"
+                      class="btn btn-primary"
+                    >
+                      Alterar</a
+                    >
+                  </td>
+                  <td>
+                    <a
+                      th:href="@{/removeAluno(id=${aluno.matricula})}"
+                      class="btn btn-danger"
+                    >
+                      Excluir</a
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

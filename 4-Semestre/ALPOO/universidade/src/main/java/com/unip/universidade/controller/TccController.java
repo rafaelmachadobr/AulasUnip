@@ -2,9 +2,11 @@ package com.unip.universidade.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.unip.universidade.model.Aluno;
@@ -13,8 +15,10 @@ import com.unip.universidade.repository.AlunoRepository;
 import com.unip.universidade.repository.TccRepository;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 @Controller
+@SessionAttributes({ "listaAlunos", "listaTcc" })
 public class TccController {
     @Autowired
     private TccRepository tccRepository;
@@ -33,7 +37,10 @@ public class TccController {
 
     @PostMapping("/cadastroTcc")
     @Transactional
-    public String cadastro(@ModelAttribute("tcc") Tcc pTcc) {
+    public String cadastro(@Valid @ModelAttribute("tcc") Tcc pTcc, Errors errors) {
+        if (errors.hasErrors())
+            return "tcc";
+
         Tcc tcc = new Tcc(pTcc.getTitulo(), pTcc.getAno(),
                 pTcc.getSemestre(), pTcc.getAlunosGrupo());
         for (Aluno a : tcc.getAlunosGrupo()) {
